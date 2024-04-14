@@ -1,0 +1,28 @@
+#cloud-config
+
+hostname: ${hostname}
+
+# add bruteforce user
+users:
+  - default
+  - name: pi
+    plain_text_passwd: ${pi_password}
+    lock_passwd: false
+
+# change default vagrant password
+chpasswd:
+  expire: false
+  users:
+    - name: vagrant
+      password: ${vagrant_password}
+      type: text
+
+runcmd:
+  - netplan apply
+  - usermod -u 999 ubuntu
+  - usermod -u 1001 pi
+
+output: 
+  all: |
+    tee -a /var/log/cloud-init-output.log
+
